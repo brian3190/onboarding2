@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace onboarding2.Data
+namespace onboarding2.Models
 {
     public class Sales
     {

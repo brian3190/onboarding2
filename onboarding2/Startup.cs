@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
 
 namespace onboarding2
@@ -22,13 +23,14 @@ namespace onboarding2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddDbContext<onboardingContext>();
+            //services.AddScoped<ICustomerRepository, CustomerRepository>();
             //Enable CORS
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
-            services.AddDbContext<onboardingContext>;
 
 
             services.AddControllersWithViews()
