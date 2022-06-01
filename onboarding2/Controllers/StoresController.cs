@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
+using onboarding2.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace onboarding2.Controllers
         {
             try
             {
-                var results = await _context.Customers.Take(10).ToListAsync();
+                var results = await _context.Stores.Take(10).ToListAsync();
                 return Ok(results);
             }
             catch (Exception)
@@ -31,10 +32,24 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: StoresController/Details/5
-        public IActionResult Details(int id)
+        // GET: StoresController/GetStores/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStores(int? id)
         {
-            return Ok();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var results = await _context.Stores.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                if (results == null) return NotFound();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         // GET: StoresController/Create
@@ -46,59 +61,64 @@ namespace onboarding2.Controllers
         // POST: StoresController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([FromBody] Store store)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Stores.Add(store);
+                await _context.SaveChangesAsync();
+                //return Ok();
+                return CreatedAtAction(
+                    "GetCustomer",
+                    new { id = store.Id },
+                    store
+                );
             }
-            catch
+            catch (Exception)
             {
-                return Ok();
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
 
-        // GET: StoresController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            return Ok();
-        }
-
-        // POST: StoresController/Edit/5
-        [HttpPost]
+        // EDIT: StoresController/Edit/5
+        [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] Store store)
         {
+            if (id != store.Id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(store).State = EntityState.Modified;
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return Ok();
+                if (_context.Customers.Find(id) == null)
+                {
+                    return NotFound();
+                }
+
+                throw;
             }
+            return NoContent();
         }
 
         // DELETE: StoresController/Delete/5
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            return Ok();
-        }
-
-        // DELETE: StoresController/Delete/5
-        [HttpPost]
+        [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult<Store>> Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return Ok();
-            }
+            var _store = await _context.Stores.FindAsync(id);
+
+            if (_store == null) return NotFound();
+
+            _context.Stores.Remove(_store);
+            await _context.SaveChangesAsync();
+
+            return _store;
         }
     }
 }

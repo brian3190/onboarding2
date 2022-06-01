@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
+using onboarding2.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace onboarding2.Controllers
         {
             try
             {
-                var results = await _context.Customers.Take(10).ToListAsync();
+                var results = await _context.Sales.Take(10).ToListAsync();
+                if (results == null) return NotFound();
                 return Ok(results);
             }
             catch (Exception)
@@ -32,29 +34,44 @@ namespace onboarding2.Controllers
         }
 
         // GET: SalesController/Details/5
-        public IActionResult Details(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSales(int? id)
         {
-            return Ok();
-        }
-
-        // GET: SalesController/Create
-        public IActionResult Create()
-        {
-            return Ok();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var results = await _context.Sales.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                if (results == null) return NotFound();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         // POST: SalesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([FromBody] Sales sales)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Sales.Add(sales);
+                await _context.SaveChangesAsync();
+                //return Ok();
+                return CreatedAtAction(
+                    "GetSales",
+                    new { id = sales.Id },
+                    sales
+                );
             }
-            catch
+            catch (Exception)
             {
-                return Ok();
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
 
@@ -67,38 +84,42 @@ namespace onboarding2.Controllers
         // POST: SalesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] Sales sales)
         {
+            if (id != sales.Id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(sales).State = EntityState.Modified;
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return Ok();
-            }
-        }
+                if (_context.Sales.Find(id) == null)
+                {
+                    return NotFound();
+                }
 
-        // GET: SalesController/Delete/5
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            return Ok();
+                throw;
+            }
+            return NoContent();
         }
 
         // DELETE: SalesController/Delete/5
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult<Sales>> Delete(int id, IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return Ok();
-            }
+            var _sales = await _context.Sales.FindAsync(id);
+
+            if (_sales == null) return NotFound();
+
+            _context.Sales.Remove(_sales);
+            await _context.SaveChangesAsync();
+
+            return _sales;
         }
     }
 }

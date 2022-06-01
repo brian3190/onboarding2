@@ -39,8 +39,6 @@ namespace onboarding2.Data
                 .HasOne(s => s.Store)
                 .WithMany(s => s.ProductSold)
                 .HasForeignKey(s => s.StoreId);
-            modelBuilder.Entity<Sales>()
-                .Ignore(s => s.DateSold);
         }
     }
 }

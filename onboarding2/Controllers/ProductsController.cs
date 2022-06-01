@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
+using onboarding2.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace onboarding2.Controllers
         {
             try
             {
-                var results = await _context.Customers.Take(10).ToListAsync();
+                var results = await _context.Products.Take(10).ToListAsync();
                 return Ok(results);
             }
             catch (Exception)
@@ -32,12 +33,18 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: ProductsController/Details/5
-        public async Task<IActionResult> Details(int id)
+        // GET: ProductsController/Products/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProduct(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             try
             {
-                var results = await _context.Customers.Take(10).ToListAsync();
+                var results = await _context.Products.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                if (results == null) return NotFound();
                 return Ok(results);
             }
             catch (Exception)
@@ -48,68 +55,65 @@ namespace onboarding2.Controllers
 
         // POST: ProductsController/Create
         [HttpPost]
-        public async Task<IActionResult> Create()
-        {
-            return Ok();
-        }
-
-        // POST: ProductsController/Create
-        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection collection)
+        public async Task<IActionResult> Create([FromBody] Product product)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                //return Ok();
+                return CreatedAtAction(
+                    "GetProduct",
+                    new { id = product.Id },
+                    product
+                );
             }
-            catch
+            catch (Exception)
             {
-                return Ok();
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
 
         // POST: ProductsController/Edit/5
-        [HttpPost]
-        public async Task<IActionResult> Edit(int id)
-        {
-            return Ok();
-        }
-
-        // POST: ProductsController/Edit/5
-        [HttpPost]
+        [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] Product product)
         {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(product).State = EntityState.Modified;
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return Ok();
+                if (_context.Products.Find(id) == null)
+                {
+                    return NotFound();
+                }
+
+                throw;
             }
+            return NoContent();
         }
 
         // DELETE: ProductsController/Delete/5
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            return Ok();
-        }
-
-        // DELETE: ProductsController/Delete/5
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult<Product>> Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return Ok();
-            }
+            var _products = await _context.Products.FindAsync(id);
+
+            if (_products == null) return NotFound();
+
+            _context.Products.Remove(_products);
+            await _context.SaveChangesAsync();
+
+            return _products;
         }
     }
 }

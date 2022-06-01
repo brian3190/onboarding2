@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
+using onboarding2.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,12 +38,11 @@ namespace onboarding2.Controllers
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
-            
         }
 
-        // GET: CustomersController/Details/5
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Details(int? id)
+        // GET: CustomersController/Customers/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCustomer(int? id)
         {
             if (id == null)
             {
@@ -62,9 +62,24 @@ namespace onboarding2.Controllers
 
         // POST: CustomersController/Create
         [HttpPost]
-        public ActionResult Create()
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromBody]Customer customer)
         {
-            return Ok();
+            try
+            {
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+                //return Ok();
+                return CreatedAtAction(
+                    "GetCustomer",
+                    new { id = customer.Id },
+                    customer
+                );
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         // POST: CustomersController/Create
@@ -82,47 +97,45 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: CustomersController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            return Ok();
-        }
-
         // POST: CustomersController/Edit/5
-        [HttpPost]
+        [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit([FromRoute]int id, [FromBody] Customer customer)
         {
+            if (id != customer.Id)
+            {
+                return BadRequest();
+            }
+            _context.Entry(customer).State = EntityState.Modified;
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch(DbUpdateConcurrencyException)
             {
-                return Ok();
+                if (_context.Customers.Find(id) == null)
+                {
+                    return NotFound();
+                }
+
+                throw;
             }
+            return NoContent();
         }
 
         // DELETE: CustomersController/Delete/5
-        [HttpDelete]
-        public ActionResult Delete(int id)
-        {
-            return Ok();
-        }
-
-        // DELETE: CustomersController/Delete/5
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult<Customer>> Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return Ok();
-            }
+            var _customer = await _context.Customers.FindAsync(id);
+
+            if (_customer == null) return NotFound();
+
+            _context.Customers.Remove(_customer);
+            await _context.SaveChangesAsync();
+
+            return _customer;
         }
     }
 }
