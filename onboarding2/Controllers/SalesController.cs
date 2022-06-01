@@ -1,36 +1,52 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using onboarding2.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace onboarding2.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class SalesController : Controller
     {
-        // GET: SalesController
-        public ActionResult Index()
+        private readonly onboardingContext _context;
+        public SalesController(onboardingContext context)
         {
-            return View();
+            _context = context;
+        }
+        // GET: SalesController
+        public async Task<IActionResult> GetSales()
+        {
+            try
+            {
+                var results = await _context.Customers.Take(10).ToListAsync();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         // GET: SalesController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
-            return View();
+            return Ok();
         }
 
         // GET: SalesController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
-            return View();
+            return Ok();
         }
 
         // POST: SalesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(IFormCollection collection)
         {
             try
             {
@@ -38,20 +54,20 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
 
         // GET: SalesController/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
-            return View();
+            return Ok();
         }
 
         // POST: SalesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -59,20 +75,21 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
 
         // GET: SalesController/Delete/5
-        public ActionResult Delete(int id)
+        [HttpDelete]
+        public IActionResult Delete(int id)
         {
-            return View();
+            return Ok();
         }
 
-        // POST: SalesController/Delete/5
-        [HttpPost]
+        // DELETE: SalesController/Delete/5
+        [HttpDelete]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -80,7 +97,7 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
     }

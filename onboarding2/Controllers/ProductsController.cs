@@ -1,36 +1,62 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using onboarding2.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace onboarding2.Controllers
 {
-    public class ProductsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductsController : ControllerBase
     {
-        // GET: ProductsController
-        public ActionResult Index()
+        private readonly onboardingContext _context;
+        public ProductsController(onboardingContext context)
         {
-            return View();
+            _context = context;
+        }
+        // GET: ProductsController
+        [HttpGet]
+        public async Task<IActionResult> GetProducts()
+        {
+            try
+            {
+                var results = await _context.Customers.Take(10).ToListAsync();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         // GET: ProductsController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            try
+            {
+                var results = await _context.Customers.Take(10).ToListAsync();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
-        // GET: ProductsController/Create
-        public ActionResult Create()
+        // POST: ProductsController/Create
+        [HttpPost]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            return Ok();
         }
 
         // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -38,20 +64,21 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
 
-        // GET: ProductsController/Edit/5
-        public ActionResult Edit(int id)
+        // POST: ProductsController/Edit/5
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            return Ok();
         }
 
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -59,20 +86,21 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
 
-        // GET: ProductsController/Delete/5
-        public ActionResult Delete(int id)
+        // DELETE: ProductsController/Delete/5
+        [HttpDelete]
+        public IActionResult Delete(int id)
         {
-            return View();
+            return Ok();
         }
 
-        // POST: ProductsController/Delete/5
-        [HttpPost]
+        // DELETE: ProductsController/Delete/5
+        [HttpDelete]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -80,7 +108,7 @@ namespace onboarding2.Controllers
             }
             catch
             {
-                return View();
+                return Ok();
             }
         }
     }

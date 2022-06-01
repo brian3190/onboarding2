@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using onboarding2.Data;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace onboarding2.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly DbContext _context;
-        public CustomersController(DbContext context)
+        private readonly onboardingContext _context;
+        public CustomersController(onboardingContext context)
         {
             _context = context;
         }
@@ -24,10 +27,10 @@ namespace onboarding2.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCustomers()
         {
-            
             try
             {
-                var results = await _context.GetAllCampsAsync();
+                var results = await _context.Customers.Take(10).ToListAsync();
+                if (results == null) return NotFound();
                 return Ok(results);
             }
             catch (Exception)
@@ -38,16 +41,27 @@ namespace onboarding2.Controllers
         }
 
         // GET: CustomersController/Details/5
-        public IActionResult Details(int? id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            return Ok();
+            try
+            {
+                var results = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                if (results == null) return NotFound();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
-        // GET: CustomersController/Create
+        // POST: CustomersController/Create
+        [HttpPost]
         public ActionResult Create()
         {
             return Ok();
@@ -89,14 +103,15 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: CustomersController/Delete/5
+        // DELETE: CustomersController/Delete/5
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             return Ok();
         }
 
-        // POST: CustomersController/Delete/5
-        [HttpPost]
+        // DELETE: CustomersController/Delete/5
+        [HttpDelete]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, IFormCollection collection)
         {

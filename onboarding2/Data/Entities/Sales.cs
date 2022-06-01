@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace onboarding2.Models
+namespace onboarding2.Entities
 {
     public class Sales
     {

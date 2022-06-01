@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 using onboarding2.Data;
 
 namespace onboarding2
@@ -23,8 +23,9 @@ namespace onboarding2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<onboardingContext>();
+            services.AddDbContext<onboardingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("onboardingContext")));
             //services.AddScoped<ICustomerRepository, CustomerRepository>();
+
             //Enable CORS
             services.AddCors(c =>
             {
@@ -44,6 +45,8 @@ namespace onboarding2
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            
+            services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +55,7 @@ namespace onboarding2
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

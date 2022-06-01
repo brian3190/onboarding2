@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace onboarding2.Models
+namespace onboarding2.Entities
 {
     public class Product
     {
