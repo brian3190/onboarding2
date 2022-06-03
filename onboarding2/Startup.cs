@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using onboarding2.Data;
+//using Newtonsoft.Json.Serializaton;
 
 namespace onboarding2
 {
@@ -21,7 +22,7 @@ namespace onboarding2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<onboardingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("onboardingContext")));
+            services.AddDbContext<onboardingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("onboarding2")));
             //services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             //Enable CORS
@@ -37,6 +38,21 @@ namespace onboarding2
             //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             //    .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
             //    = new DefaultContractResolver());
+
+            //services.AddAuthentication("Bearer")
+            //    .AddJwtBearer("Bearer", options =>
+            //    {
+            //        options.Authority = "http://localhost:51959";
+            //        options.RequireHttpsMetadata = false;
+
+            //        options.Audience = "hps-api";
+
+            //        options.TokenValidationParameters =
+            //        new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //        {
+            //            ValidateAudience = false
+            //        };
+            //    });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -68,7 +84,9 @@ namespace onboarding2
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+            //app.UseIdentityServer();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
