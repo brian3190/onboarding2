@@ -21,7 +21,7 @@ export default class App extends Component {
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/customers' component={Customer} />
-        <Route path='/product' component={Product} />
+        <Route path='/products' component={Product} />
         <Route path='/stores' component={Store} />
         <Route path='/sales' component={Sales} />
       </Layout>

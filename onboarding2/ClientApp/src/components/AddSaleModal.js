@@ -57,20 +57,17 @@ export class AddSaleModal extends Component {
                                         <Form.Label>Store</Form.Label>
                                         <Form.Select name="Store" required />
                                     </Form.Group>
-
-                                    <Form.Group controlId="SubmitButtons">
-                                        <Button variant="dark" onClick={this.props.onHide}>
-                                            Cancel
-                                        </Button>
-                                        <Button variant="success" type="submit">
-                                            Create
-                                        </Button>
-                                    </Form.Group>
                                 </Form>
                             </Col>
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button variant="dark" onClick={this.props.onHide}>
+                            Cancel
+                        </Button>
+                        <Button variant="success" type="submit">
+                            Create
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

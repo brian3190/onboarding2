@@ -53,23 +53,19 @@ export class AddStoreModal extends Component {
                                         <Form.Label>ADDRESS</Form.Label>
                                         <Form.Control type="text" name="StoreAddress" required />
                                     </Form.Group>
-
-                                    <Form.Group controlId="SubmitButtons">
-                                        <Button variant="dark" onClick={this.props.onHide}>
-                                            Cancel
-                                        </Button>
-                                        <ButtonGroup>
-                                            <Button variant="success" type="submit">
-                                                Create | <FaCheck color="white" />
-                                            </Button>
-
-                                        </ButtonGroup>
-                                    </Form.Group>
                                 </Form>
                             </Col>
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button variant="dark" onClick={this.props.onHide}>
+                            Cancel
+                        </Button>
+                        <ButtonGroup>
+                            <Button variant="success" type="submit">
+                                Create | <FaCheck color="white" />
+                            </Button>
+                        </ButtonGroup>
                     </Modal.Footer>
                 </Modal>
             </div>

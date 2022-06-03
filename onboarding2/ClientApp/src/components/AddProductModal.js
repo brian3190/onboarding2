@@ -53,10 +53,6 @@ export class AddProductModal extends Component {
                                         <Form.Label>PRICE</Form.Label>
                                         <Form.Control type="text" name="ProductPrice" required />
                                     </Form.Group>
-
-                                    <Form.Group controlId="SubmitButtons">
-                                       
-                                    </Form.Group>
                                 </Form>
                             </Col>
                         </Row>

@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import { Button, ButtonToolbar } from 'react-bootstrap';
-import { AddCustomerModal } from './AddCustomerModal';
+import { Button } from 'react-bootstrap';
+import { AddStoreModal } from './AddStoreModal';
 
 export class Store extends Component {
     constructor(props) {
@@ -30,13 +30,11 @@ export class Store extends Component {
         let addModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
-                <ButtonToolbar>
-                    <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
-                        New Store
-                    </Button>
-                    <AddCustomerModal show={this.state.addModalShow}
-                        onHide={addModalClose} />
-                </ButtonToolbar>
+                <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
+                    New Store
+                </Button>
+                <AddStoreModal show={this.state.addModalShow}
+                    onHide={addModalClose} />
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
