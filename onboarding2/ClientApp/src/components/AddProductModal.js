@@ -36,7 +36,7 @@ export class AddProductModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Create Product
                         </Modal.Title>

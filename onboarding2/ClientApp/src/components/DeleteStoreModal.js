@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
-import { ImCross } from 'react-icons/fa';
+import { ImCross } from 'react-icons/im';
 
 
 export class DeleteStoreModal extends Component {
@@ -11,7 +11,7 @@ export class DeleteStoreModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'store'/* + id" */, {
+        fetch(process.env.REACT_APP_API + 'store/' + this.props.storeid, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -33,7 +33,7 @@ export class DeleteStoreModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Delete Store
                         </Modal.Title>

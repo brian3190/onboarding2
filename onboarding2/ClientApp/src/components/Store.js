@@ -30,7 +30,7 @@ export class Store extends Component {
     }
 
     render() {
-        const { stor } = this.state;
+        const { stor, storeid, storename, storeadd } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
@@ -54,16 +54,20 @@ export class Store extends Component {
                                 <td>{c.Name}</td>
                                 <td>{c.Address}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, storeid: c.Id, storename: c.Name, storeadd: c.Address })}>
                                         <PencilSquare color="white" />
                                         EDIT
                                     </Button>
+                                    <EditStoreModal show={this.state.editModalShow}
+                                        onHide={ModalClose} storeid={storeid} storename={storename} storeadd={storeadd}/>
                                 </td>
                                 <td>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
+                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, storeid: c.Id })}>
                                         <TrashFill color="white" />
                                         DELETE
                                     </Button>
+                                    <DeleteStoreModal show={this.state.deleteModalShow}
+                                        onHide={ModalClose} storeid={storeid} />
                                 </td>
                             </tr>)
                         }

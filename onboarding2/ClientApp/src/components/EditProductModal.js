@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
-
+import { Modal, Button, ButtonGroup, Row, Col, Form } from 'react-bootstrap';
+import { FaCheck } from 'react-icons/fa';
 export class EditProductModal extends Component {
     constructor(props) {
         super(props);
@@ -9,15 +9,15 @@ export class EditProductModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'products' /* + id */, {
+        fetch(process.env.REACT_APP_API + 'products/' + this.props.productid, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                ProductName: event.target.ProductName.value,
-                ProductPrice: event.target.ProductPrice.value
+                Name: event.target.ProductName.value,
+                Price: event.target.ProductPrice.value
             })
         })
             .then(res => res.json())
@@ -35,7 +35,7 @@ export class EditProductModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Edit Product
                         </Modal.Title>

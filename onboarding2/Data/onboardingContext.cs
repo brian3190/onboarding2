@@ -23,9 +23,12 @@ namespace onboarding2.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Customer>().ToTable("Customer");
-            modelBuilder.Entity<Store>().ToTable("Store");
-            modelBuilder.Entity<Product>().ToTable("Product");
+            modelBuilder.Entity<Customer>().ToTable("Customers");
+            modelBuilder.Entity<Store>().ToTable("Stores");
+            modelBuilder.Entity<Product>().ToTable("Products");
+            modelBuilder.Entity<Product>().Property(p => p.Price)
+                                            .HasColumnName("Price")
+                                            .HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Sales>().ToTable("Sales");
             modelBuilder.Entity<Sales>()
                 .HasOne(s => s.Customer)

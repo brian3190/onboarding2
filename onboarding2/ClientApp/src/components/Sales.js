@@ -30,7 +30,7 @@ export class Sales extends Component {
     }
 
     render() {
-        const { sales } = this.state;
+        const { sales, datesold, saleid } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
@@ -60,22 +60,22 @@ export class Sales extends Component {
                                 <td>{c.Store}</td>
                                 <td>{c.DateSold}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, datesold: c.DateSold, saleid: c.Id })}>
                                         {/* <Icon link name="edit" /> /> */}
                                         <PencilSquare color="white"/>
                                         EDIT
                                     </Button>
                                     <EditSaleModal show={this.state.editModalShow}
-                                        onHide={ModalClose} />
+                                        onHide={ModalClose} datesold={datesold}/>
                                 </td>
                                 <td>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
+                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, saleid: c.Id })}>
                                         {/* <Icon link name="trash" /> */}
                                         <TrashFill color="white"/>
                                         DELETE
                                     </Button>
                                     <DeleteSaleModal show={this.state.deleteModalShow}
-                                        onHide={ModalClose} />
+                                        onHide={ModalClose} saleid={saleid}/>
                                 </td>
                             </tr>)
                         }

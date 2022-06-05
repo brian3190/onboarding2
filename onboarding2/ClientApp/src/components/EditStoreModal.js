@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
+import { Modal, Button, ButtonGroup, Row, Col, Form } from 'react-bootstrap';
+import { FaCheck } from 'react-icons/fa';
 
 export class EditStoreModal extends Component {
     constructor(props) {
@@ -9,15 +10,15 @@ export class EditStoreModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'stores' /* +id */, {
+        fetch(process.env.REACT_APP_API + 'stores/' + this.props.storeid, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                StoreName: event.target.StoreName.value,
-                StoreAddress: event.target.StoreAddress.value
+                Name: event.target.StoreName.value,
+                Address: event.target.StoreAddress.value
             })
         })
             .then(res => res.json())
@@ -35,7 +36,7 @@ export class EditStoreModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Edit Store
                         </Modal.Title>
@@ -46,11 +47,11 @@ export class EditStoreModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="StoreName">
                                         <Form.Label>NAME</Form.Label>
-                                        <Form.Control type="text" name="StoreName" required />
+                                        <Form.Control type="text" name="StoreName" defaultValue={this.props.storename} required />
                                     </Form.Group>
                                     <Form.Group controlId="StoreAddress">
                                         <Form.Label>ADDRESS</Form.Label>
-                                        <Form.Control type="text" name="StoreAddress" required />
+                                        <Form.Control type="text" name="StoreAddress" defaultValue={this.props.storeadd} required />
                                     </Form.Group>
 
 

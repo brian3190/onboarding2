@@ -4,7 +4,16 @@ import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 export class AddSaleModal extends Component {
     constructor(props) {
         super(props);
+        this.state = { sales: [] };
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount(){
+        fetch(process.env.REACT_APP_API + 'sales')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({ sales: data });
+        });
     }
 
     handleSubmit(event) {
@@ -36,7 +45,7 @@ export class AddSaleModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Create Customer
                         </Modal.Title>
@@ -47,19 +56,28 @@ export class AddSaleModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="SaleDateSold">
                                         <Form.Label>Date Sold</Form.Label>
-                                        <Form.Control type="text" name="SaleDateSold" placeholder="from props" disabled />
+                                        <Form.Control type="text" name="SaleDateSold" defaultValue={this.props.datesold} disabled />
                                     </Form.Group>
                                     <Form.Group controlId="Customer">
                                         <Form.Label>Customer</Form.Label>
-                                        <Form.Select name="Customer" required />
+                                        <Form.Control as="select" name="Customer">
+                                            {this.state.sales.map(c =>
+                                                <option key={c.Id}> {c.Customer.Name} </option> )}
+                                        </Form.Control>
                                     </Form.Group>
                                     <Form.Group controlId="Product">
                                         <Form.Label>Product</Form.Label>
-                                        <Form.Select name="Product" required />
+                                        <Form.Control as="select" name="Sales">
+                                            {this.state.sales.map(c =>
+                                                <option key={c.Id}>{c.Product.Name}</option>)}
+                                        </Form.Control>
                                     </Form.Group>
                                     <Form.Group controlId="Store">
                                         <Form.Label>Store</Form.Label>
-                                        <Form.Select name="Store" required />
+                                        <Form.Control as="select" name="Store">
+                                            {this.state.sales.map(c =>
+                                                <option key={c.Id}>{c.Store.Name}</option>)}
+                                        </Form.Control>
                                     </Form.Group>
                                 </Form>
                             </Col>

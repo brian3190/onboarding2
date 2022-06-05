@@ -5,8 +5,9 @@ namespace onboarding2.Entities
 {
     public class Product
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+        [Column(TypeName = "nvarchar(200)")]
         public string Name { get; set; }
         public decimal Price { get; set; }
         public List<Sales> ProductSold { get; set; }

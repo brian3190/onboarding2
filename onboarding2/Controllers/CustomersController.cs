@@ -24,9 +24,9 @@ namespace onboarding2.Controllers
         //    _repository = repository;
         //}
 
-        // GET: CustomersController
+        // GET: api/Customers/Index/
         [HttpGet]
-        public async Task<IActionResult> GetCustomers()
+        public async Task<IActionResult> Index()
         {
             try
             {
@@ -40,9 +40,9 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: CustomersController/Customers/5
+        // GET: api/Customers/Get/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomer(int? id)
+        public async Task<IActionResult> Get(int? id)
         {
             if (id == null)
             {
@@ -105,8 +105,7 @@ namespace onboarding2.Controllers
             if (id != customer.Id)
             {
                 return BadRequest();
-            }
-            
+            }          
             try
             {
                 var _editedCustomer = await _context.Customers.FindAsync(id);

@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
+import { Modal, Button, ButtonGroup, Row, Col, Form } from 'react-bootstrap';
+import { FaCheck } from 'react-icons/fa';
 
 export class EditSaleModal extends Component {
     constructor(props) {
@@ -9,16 +10,16 @@ export class EditSaleModal extends Component {
      
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'sales' /* + id*/ , {
+        fetch(process.env.REACT_APP_API + 'sales/'+ this.props.saleid , {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                CustomerName: event.target.CustomerName.value,
-                ProductName: event.target.ProductName.value,
-                StoreName: event.target.StoreName.value
+                Customer: event.target.CustomerName.value,
+                Product: event.target.ProductName.value,
+                Store: event.target.StoreName.value
             })
         })
             .then(res => res.json())
@@ -36,7 +37,7 @@ export class EditSaleModal extends Component {
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Edit Sales
                         </Modal.Title>
@@ -48,7 +49,7 @@ export class EditSaleModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="DateSold">
                                         <Form.Label>Date Sold</Form.Label>
-                                        <Form.Control type="text" name="DateSold" placeholder="from props" disabled />
+                                        <Form.Control type="text" name="DateSold" defaultValue={this.props.datesold} disabled />
                                     </Form.Group>
                                     <Form.Group controlId="CustomerName">
                                         <Form.Label>Customer</Form.Label>
@@ -62,8 +63,6 @@ export class EditSaleModal extends Component {
                                         <Form.Label>Store</Form.Label>
                                         <Form.Control type="drop-down" name="StoreName" required />
                                     </Form.Group>
-
-
                                 </Form>
                             </Col>
                         </Row>

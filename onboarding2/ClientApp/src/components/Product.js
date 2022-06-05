@@ -3,6 +3,8 @@ import { Table, Button } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { TrashFill } from 'react-bootstrap-icons';
 import { AddProductModal } from './AddProductModal';
+import { EditProductModal } from './EditProductModal';
+import { DeleteProductModal } from './DeleteProductModal';
 
 export class Product extends Component {
     constructor(props) {
@@ -27,7 +29,7 @@ export class Product extends Component {
     }
 
     render() {
-        const { prod } = this.state;
+        const { prod, productid } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
@@ -35,7 +37,7 @@ export class Product extends Component {
                     New Product
                 </Button>
                 <AddProductModal show={this.state.addModalShow}
-                    onHide={addModalClose} />
+                    onHide={ModalClose} />
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -51,7 +53,7 @@ export class Product extends Component {
                                 <td>{c.Name}</td>
                                 <td>{c.Address}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, productid: c.Id })}>
                                         <PencilSquare color="white" />
                                         EDIT
                                         {/*propsId*/}
@@ -60,12 +62,12 @@ export class Product extends Component {
                                     </Button>
                                 </td>
                                 <td>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
+                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, productid: c.Id })}>
                                         <TrashFill color="white" />
                                         DELETE
                                         {/*propsId*/}
                                         <DeleteProductModal show={this.state.deleteModalShow}
-                                            onHide={ModalClose} />
+                                            onHide={ModalClose} productid={productid} />
                                     </Button>
                                 </td>
                             </tr>)

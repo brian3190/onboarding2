@@ -28,7 +28,7 @@ export class Customer extends Component {
     }
 
     render() {
-        const { cust } = this.state;
+        const { cust, custid } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
@@ -53,7 +53,7 @@ export class Customer extends Component {
                                 <Table.Cell>{c.Name}</Table.Cell>
                                 <Table.Cell>{c.Address}</Table.Cell>
                                 <Table.Cell>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, custid: c.Id })}>
                                         <Icon link name="edit" />
                                         EDIT
                                         {/*propsId*/}
@@ -63,13 +63,12 @@ export class Customer extends Component {
                                     </Button>
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
+                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, custid: c.Id })}>
                                         <Icon link name="trash" />
                                         DELETE
                                         {/*propsId*/}
                                         <DeleteCustomerModal show={this.state.deleteModalShow}
-                                             
-                                            onHide={ModalClose} />
+                                            onHide={ModalClose} custid={custid} />
                                     </Button>
                                 </Table.Cell>
                             </Table.Row>)
