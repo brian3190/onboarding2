@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
-import { Table , Button } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import { PencilSquare } from 'react-bootstrap-icons';
+import { TrashFill } from 'react-bootstrap-icons';
 import { AddProductModal } from './AddProductModal';
 
 export class Product extends Component {
@@ -9,7 +11,7 @@ export class Product extends Component {
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'product')
+        fetch(process.env.REACT_APP_API + 'products')
             .then(res => res.json())
             .then(data => {
                 this.setState({ prod: data });
@@ -26,7 +28,7 @@ export class Product extends Component {
 
     render() {
         const { prod } = this.state;
-        let addModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
+        let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
                 <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
@@ -50,14 +52,20 @@ export class Product extends Component {
                                 <td>{c.Address}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
-                                        <i class="edit icon"></i>
+                                        <PencilSquare color="white" />
                                         EDIT
+                                        {/*propsId*/}
+                                        <EditProductModal show={this.state.editModalShow}
+                                            onHide={ModalClose} />
                                     </Button>
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
-                                        <i class="trash icon"></i>
+                                        <TrashFill color="white" />
                                         DELETE
+                                        {/*propsId*/}
+                                        <DeleteProductModal show={this.state.deleteModalShow}
+                                            onHide={ModalClose} />
                                     </Button>
                                 </td>
                             </tr>)

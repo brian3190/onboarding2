@@ -23,7 +23,11 @@ namespace onboarding2.Controllers
         {
             try
             {
-                var results = await _context.Sales.Take(10).ToListAsync();
+                var results = await _context.Sales
+                    .Include("Customer")
+                    .Include("Product")
+                    .Include("Store")
+                    .Take(10).AsNoTracking().ToListAsync();
                 if (results == null) return NotFound();
                 return Ok(results);
             }
@@ -43,7 +47,11 @@ namespace onboarding2.Controllers
             }
             try
             {
-                var results = await _context.Sales.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                var results = await _context.Sales
+                    .Include("Customer")
+                    .Include("Product")
+                    .Include("Store")
+                    .AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
                 if (results == null) return NotFound();
                 return Ok(results);
             }
@@ -76,23 +84,32 @@ namespace onboarding2.Controllers
         }
 
         // GET: SalesController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            return Ok();
-        }
+        //public IActionResult Edit(int id)
+        //{
+        //    return Ok();
+        //}
 
         // POST: SalesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] Sales sales)
-        {
+        { 
             if (id != sales.Id)
             {
                 return BadRequest();
             }
-            _context.Entry(sales).State = EntityState.Modified;
+            //_context.Entry(sales).State = EntityState.Modified;
             try
             {
+                var _editedSale = await _context.Sales
+                                  .Include("Customer")
+                                  .Include("Product")
+                                  .Include("Store")
+                                  .SingleOrDefaultAsync(s => s.Id == id);
+                _editedSale.Customer.Name = sales.Customer.Name;
+                _editedSale.Product.Name = sales.Product.Name;
+                _editedSale.Store.Name = sales.Store.Name;
+                //Concurrency check
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -110,11 +127,10 @@ namespace onboarding2.Controllers
         // DELETE: SalesController/Delete/5
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Sales>> Delete(int id, IFormCollection collection)
+        public async Task<ActionResult<Sales>> Delete(int? id)
         {
+            if (id == null) return NotFound();
             var _sales = await _context.Sales.FindAsync(id);
-
-            if (_sales == null) return NotFound();
 
             _context.Sales.Remove(_sales);
             await _context.SaveChangesAsync();

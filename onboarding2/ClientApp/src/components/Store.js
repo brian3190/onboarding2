@@ -1,7 +1,11 @@
 ﻿import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import { PencilSquare } from 'react-bootstrap-icons';
+import { TrashFill } from 'react-bootstrap-icons';
 import { AddStoreModal } from './AddStoreModal';
+import { EditStoreModal } from './EditStoreModal';
+import { DeleteStoreModal } from './DeleteStoreModal';
 
 export class Store extends Component {
     constructor(props) {
@@ -10,7 +14,7 @@ export class Store extends Component {
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'customer')
+        fetch(process.env.REACT_APP_API + 'stores')
             .then(res => res.json())
             .then(data => {
                 this.setState({ stor: data });
@@ -27,14 +31,14 @@ export class Store extends Component {
 
     render() {
         const { stor } = this.state;
-        let addModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
+        let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
                 <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
                     New Store
                 </Button>
                 <AddStoreModal show={this.state.addModalShow}
-                    onHide={addModalClose} />
+                    onHide={ModalClose} />
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -51,13 +55,13 @@ export class Store extends Component {
                                 <td>{c.Address}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
-                                        <i class="edit icon"></i>
+                                        <PencilSquare color="white" />
                                         EDIT
                                     </Button>
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
-                                        <i class="trash icon"></i>
+                                        <TrashFill color="white" />
                                         DELETE
                                     </Button>
                                 </td>

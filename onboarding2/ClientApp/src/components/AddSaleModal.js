@@ -9,7 +9,7 @@ export class AddSaleModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'sale', {
+        fetch(process.env.REACT_APP_API + 'sales', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -45,6 +45,10 @@ export class AddSaleModal extends Component {
                         <Row>
                             <Col sm={6}>
                                 <Form onSubmit={this.handleSubmit}>
+                                    <Form.Group controlId="SaleDateSold">
+                                        <Form.Label>Date Sold</Form.Label>
+                                        <Form.Control type="text" name="SaleDateSold" placeholder="from props" disabled />
+                                    </Form.Group>
                                     <Form.Group controlId="Customer">
                                         <Form.Label>Customer</Form.Label>
                                         <Form.Select name="Customer" required />

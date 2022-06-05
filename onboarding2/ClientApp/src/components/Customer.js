@@ -2,6 +2,8 @@
 //import { Table } from 'react-bootstrap';
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { AddCustomerModal } from './AddCustomerModal';
+import { EditCustomerModal } from './EditCustomerModal';
+import { DeleteCustomerModal } from './DeleteCustomerModal';
 
 export class Customer extends Component {
     constructor(props) {
@@ -10,7 +12,7 @@ export class Customer extends Component {
     }
 
    refreshList() {
-       fetch(process.env.REACT_APP_API + 'customer')
+       fetch(process.env.REACT_APP_API + 'customers')
            .then(res => res.json())
            .then(data => {
                this.setState({ cust: data });
@@ -27,7 +29,7 @@ export class Customer extends Component {
 
     render() {
         const { cust } = this.state;
-        let addModalClose = () => this.setState({ addModalShow: false });
+        let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
                 <Button primary onClick={() => this.setState({ addModalShow: true })}>
@@ -35,7 +37,7 @@ export class Customer extends Component {
                     New Customer
                 </Button>
                 <AddCustomerModal show={this.state.addModalShow}
-                    onHide={addModalClose} />
+                    onHide={ModalClose} />
                 <Table className="mt-4" striped bordered hover size="sm">
                     <Table.Header>
                         <Table.Row>
@@ -54,12 +56,20 @@ export class Customer extends Component {
                                     <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
                                         <Icon link name="edit" />
                                         EDIT
+                                        {/*propsId*/}
+                                        <EditCustomerModal show={this.state.editModalShow} 
+                                            
+                                            onHide={ModalClose} />
                                     </Button>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
                                         <Icon link name="trash" />
                                         DELETE
+                                        {/*propsId*/}
+                                        <DeleteCustomerModal show={this.state.deleteModalShow}
+                                             
+                                            onHide={ModalClose} />
                                     </Button>
                                 </Table.Cell>
                             </Table.Row>)

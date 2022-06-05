@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import { ImCross } from 'react-icons/fa';
 
 
-export class DeleteCustomerModal extends Component {
+export class DeleteStoreModal extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -11,7 +11,7 @@ export class DeleteCustomerModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'customer'/* + id" */ , {
+        fetch(process.env.REACT_APP_API + 'store'/* + id" */, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -35,7 +35,7 @@ export class DeleteCustomerModal extends Component {
                     centered>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Delete Customer
+                            Delete Store
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

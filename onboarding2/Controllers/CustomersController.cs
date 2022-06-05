@@ -100,15 +100,19 @@ namespace onboarding2.Controllers
         // POST: CustomersController/Edit/5
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute]int id, [FromBody] Customer customer)
+        public async Task<IActionResult> Edit([FromRoute]int id, [FromBody]Customer customer)
         {
             if (id != customer.Id)
             {
                 return BadRequest();
             }
-            _context.Entry(customer).State = EntityState.Modified;
+            
             try
             {
+                var _editedCustomer = await _context.Customers.FindAsync(id);
+                _editedCustomer.Name = customer.Name;
+                _editedCustomer.Address = customer.Address;
+                //Concurrency check
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException)
@@ -126,16 +130,19 @@ namespace onboarding2.Controllers
         // DELETE: CustomersController/Delete/5
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Customer>> Delete(int id)
+        public async Task<ActionResult<Customer>> Delete(int? id)
         {
-            var _customer = await _context.Customers.FindAsync(id);
-
-            if (_customer == null) return NotFound();
-
-            _context.Customers.Remove(_customer);
-            await _context.SaveChangesAsync();
-
-            return _customer;
+            try
+            {
+                var _customers = await _context.Customers.FindAsync(id);
+                _context.Customers.Remove(_customers);
+                await _context.SaveChangesAsync();
+                return _customers;
+            }
+            catch
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
     }
 }

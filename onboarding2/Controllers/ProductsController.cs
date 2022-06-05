@@ -43,7 +43,7 @@ namespace onboarding2.Controllers
             }
             try
             {
-                var results = await _context.Products.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                var results = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
                 if (results == null) return NotFound();
                 return Ok(results);
             }
@@ -87,6 +87,10 @@ namespace onboarding2.Controllers
             _context.Entry(product).State = EntityState.Modified;
             try
             {
+                var _editedProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+                _editedProduct.Name = product.Name;
+                _editedProduct.Price = product.Price;
+                //Concurrency check
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -106,14 +110,18 @@ namespace onboarding2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<Product>> Delete(int id)
         {
-            var _products = await _context.Products.FindAsync(id);
+            try
+            {
+                var _products = await _context.Products.FindAsync(id);
+                _context.Products.Remove(_products);
+                await _context.SaveChangesAsync();
+                return _products;
 
-            if (_products == null) return NotFound();
-
-            _context.Products.Remove(_products);
-            await _context.SaveChangesAsync();
-
-            return _products;
+            }
+            catch
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
     }
 }

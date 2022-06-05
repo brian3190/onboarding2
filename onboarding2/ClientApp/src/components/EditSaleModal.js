@@ -1,15 +1,15 @@
 ﻿import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 
-export class EditCustomerModal extends Component {
+export class EditSaleModal extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+     
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'customers'  /* + id */, {
+        fetch(process.env.REACT_APP_API + 'sales' /* + id*/ , {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -17,7 +17,8 @@ export class EditCustomerModal extends Component {
             },
             body: JSON.stringify({
                 CustomerName: event.target.CustomerName.value,
-                CustomerAddress: event.target.CustomerAddress.value
+                ProductName: event.target.ProductName.value,
+                StoreName: event.target.StoreName.value
             })
         })
             .then(res => res.json())
@@ -37,21 +38,32 @@ export class EditCustomerModal extends Component {
                     centered>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Edit Customer
+                            Edit Sales
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Row>
                             <Col sm={6}>
+                                
                                 <Form onSubmit={this.handleSubmit}>
+                                    <Form.Group controlId="DateSold">
+                                        <Form.Label>Date Sold</Form.Label>
+                                        <Form.Control type="text" name="DateSold" placeholder="from props" disabled />
+                                    </Form.Group>
                                     <Form.Group controlId="CustomerName">
-                                        <Form.Label>NAME</Form.Label>
+                                        <Form.Label>Customer</Form.Label>
                                         <Form.Control type="text" name="CustomerName" required />
                                     </Form.Group>
-                                    <Form.Group controlId="CustomerAddress">
-                                        <Form.Label>ADDRESS</Form.Label>
-                                        <Form.Control type="text" name="CustomerAddress" required />
+                                    <Form.Group controlId="ProductName">
+                                        <Form.Label>Product</Form.Label>
+                                        <Form.Control type="text" name="ProductName" required />
                                     </Form.Group>
+                                    <Form.Group controlId="StoreName">
+                                        <Form.Label>Store</Form.Label>
+                                        <Form.Control type="drop-down" name="StoreName" required />
+                                    </Form.Group>
+
+
                                 </Form>
                             </Col>
                         </Row>

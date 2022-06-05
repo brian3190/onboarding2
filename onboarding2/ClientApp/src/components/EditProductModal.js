@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 
-export class EditCustomerModal extends Component {
+export class EditProductModal extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -9,15 +9,15 @@ export class EditCustomerModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'customers'  /* + id */, {
+        fetch(process.env.REACT_APP_API + 'products' /* + id */, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                CustomerName: event.target.CustomerName.value,
-                CustomerAddress: event.target.CustomerAddress.value
+                ProductName: event.target.ProductName.value,
+                ProductPrice: event.target.ProductPrice.value
             })
         })
             .then(res => res.json())
@@ -37,20 +37,20 @@ export class EditCustomerModal extends Component {
                     centered>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Edit Customer
+                            Edit Product
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Row>
                             <Col sm={6}>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group controlId="CustomerName">
+                                    <Form.Group controlId="ProductName">
                                         <Form.Label>NAME</Form.Label>
-                                        <Form.Control type="text" name="CustomerName" required />
+                                        <Form.Control type="text" name="ProductName" required />
                                     </Form.Group>
-                                    <Form.Group controlId="CustomerAddress">
-                                        <Form.Label>ADDRESS</Form.Label>
-                                        <Form.Control type="text" name="CustomerAddress" required />
+                                    <Form.Group controlId="ProductPrice">
+                                        <Form.Label>PRICE</Form.Label>
+                                        <Form.Control type="decimal" name="ProductPrice" required />
                                     </Form.Group>
                                 </Form>
                             </Col>

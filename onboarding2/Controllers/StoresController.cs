@@ -53,10 +53,10 @@ namespace onboarding2.Controllers
         }
 
         // GET: StoresController/Create
-        public IActionResult Create()
-        {
-            return Ok();
-        }
+        //public IActionResult Create()
+        //{
+        //    return Ok();
+        //}
 
         // POST: StoresController/Create
         [HttpPost]
@@ -89,9 +89,13 @@ namespace onboarding2.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(store).State = EntityState.Modified;
+            //_context.Entry(store).State = EntityState.Modified;
             try
             {
+                var _editedStore = await _context.Stores.FindAsync(id);
+                _editedStore.Name = store.Name;
+                _editedStore.Address = store.Address;
+                //Concurrency check
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -109,16 +113,19 @@ namespace onboarding2.Controllers
         // DELETE: StoresController/Delete/5
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Store>> Delete(int id)
+        public async Task<ActionResult<Store>> Delete(int? id)
         {
-            var _store = await _context.Stores.FindAsync(id);
-
-            if (_store == null) return NotFound();
-
-            _context.Stores.Remove(_store);
-            await _context.SaveChangesAsync();
-
-            return _store;
+            try
+            {
+                var _stores = await _context.Stores.FindAsync(id);
+                _context.Stores.Remove(_stores);
+                await _context.SaveChangesAsync();
+                return _stores;
+            }
+            catch
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
     }
 }

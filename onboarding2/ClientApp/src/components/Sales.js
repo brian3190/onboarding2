@@ -3,7 +3,9 @@ import { Table } from 'react-bootstrap';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { TrashFill } from 'react-bootstrap-icons';
-//import { AddCustomerModal } from './AddCustomerModal';
+import { AddSaleModal } from './AddSaleModal';
+import { EditSaleModal } from './EditSaleModal';
+import { DeleteSaleModal } from './DeleteSaleModal';
 
 export class Sales extends Component {
     constructor(props) {
@@ -26,22 +28,18 @@ export class Sales extends Component {
     componentDidUpdate() {
         this.refreshList();
     }
-    //<AddSaleModal show={this.state.addModalShow}
-    //onHide={addModalClose} />
-    //<EditSaleModal show={this.state.editModalShow}
-    //    onHide={editModalClose} />
-    //<DeleteSaleModal show={this.state.deleteModalShow}
-    //    onHide={deleteModalClose} />
+
     render() {
         const { sales } = this.state;
-        let addModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
+        let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
                 <ButtonToolbar>
                     <Button variant="primary" onClick={() => this.setState({ addModalShow: true })}>
                         New Sale
                     </Button>
-                    
+                    <AddSaleModal show={this.state.addModalShow}
+                        onHide={ModalClose} />
                 </ButtonToolbar>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
@@ -63,17 +61,21 @@ export class Sales extends Component {
                                 <td>{c.DateSold}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => this.setState({ editModalShow: true })}>
-                                        {/* <i class="edit icon"></i> */}
+                                        {/* <Icon link name="edit" /> /> */}
                                         <PencilSquare color="white"/>
                                         EDIT
                                     </Button>
+                                    <EditSaleModal show={this.state.editModalShow}
+                                        onHide={ModalClose} />
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true })}>
-                                        {/* <i class="trash icon"></i> */}
+                                        {/* <Icon link name="trash" /> */}
                                         <TrashFill color="white"/>
                                         DELETE
                                     </Button>
+                                    <DeleteSaleModal show={this.state.deleteModalShow}
+                                        onHide={ModalClose} />
                                 </td>
                             </tr>)
                         }
