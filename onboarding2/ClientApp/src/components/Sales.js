@@ -53,15 +53,14 @@ export class Sales extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {sales.map(c =>
-                            <tr key={c.Id}>
-                                <td>{c.Customer}</td>
-                                <td>{c.Product}</td>
-                                <td>{c.Store}</td>
-                                <td>{c.DateSold}</td>
+                        {sales.map((c, index) =>
+                            <tr key={index}>
+                                <td>{c[0].Customer.name}</td>
+                                <td>{c[1].Product.name}</td>
+                                <td>{c[2].Store.name}</td>
+                                <td>{c.dateSold}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => this.setState({ editModalShow: true, datesold: c.DateSold, saleid: c.Id })}>
-                                        {/* <Icon link name="edit" /> /> */}
                                         <PencilSquare color="white"/>
                                         EDIT
                                     </Button>
@@ -70,15 +69,14 @@ export class Sales extends Component {
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, saleid: c.Id })}>
-                                        {/* <Icon link name="trash" /> */}
                                         <TrashFill color="white"/>
                                         DELETE
                                     </Button>
                                     <DeleteSaleModal show={this.state.deleteModalShow}
                                         onHide={ModalClose} saleid={saleid}/>
                                 </td>
-                            </tr>)
-                        }
+                            </tr>
+                        )}
                     </tbody>
                 </Table>
             </div>

@@ -50,11 +50,11 @@ export class Store extends Component {
                     </thead>
                     <tbody>
                         {stor.map(c =>
-                            <tr key={c.Id}>
-                                <td>{c.Name}</td>
-                                <td>{c.Address}</td>
+                            <tr key={c.id}>
+                                <td>{c.name}</td>
+                                <td>{c.address}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, storeid: c.Id, storename: c.Name, storeadd: c.Address })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, storeid: c.id, storename: c.name, storeadd: c.address })}>
                                         <PencilSquare color="white" />
                                         EDIT
                                     </Button>

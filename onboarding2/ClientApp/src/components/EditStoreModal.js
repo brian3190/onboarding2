@@ -53,8 +53,6 @@ export class EditStoreModal extends Component {
                                         <Form.Label>ADDRESS</Form.Label>
                                         <Form.Control type="text" name="StoreAddress" defaultValue={this.props.storeadd} required />
                                     </Form.Group>
-
-
                                 </Form>
                             </Col>
                         </Row>

@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Modal, Button, ButtonGroup, Row, Col, Form } from 'react-bootstrap';
 import { FaCheck } from 'react-icons/fa';
+
 export class EditProductModal extends Component {
     constructor(props) {
         super(props);
@@ -46,11 +47,11 @@ export class EditProductModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="ProductName">
                                         <Form.Label>NAME</Form.Label>
-                                        <Form.Control type="text" name="ProductName" required />
+                                        <Form.Control type="text" name="ProductName" defaultValue={this.props.productname} required />
                                     </Form.Group>
                                     <Form.Group controlId="ProductPrice">
                                         <Form.Label>PRICE</Form.Label>
-                                        <Form.Control type="decimal" name="ProductPrice" required />
+                                        <Form.Control type="decimal" name="ProductPrice" defaultValue={this.props.productprice} required />
                                     </Form.Group>
                                 </Form>
                             </Col>

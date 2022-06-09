@@ -24,16 +24,16 @@ namespace onboarding2.Controllers
             try
             {
                 var results = await _context.Sales
-                    .Include("Customer")
-                    .Include("Product")
-                    .Include("Store")
+                    .Include(s => s.Customer)
+                    .Include(s => s.Product)
+                    .Include(s => s.Store)
                     .Take(10).AsNoTracking().ToListAsync();
                 if (results == null) return NotFound();
                 return Ok(results);
             }
             catch (Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status501NotImplemented, "Database Failure");
             }
         }
 

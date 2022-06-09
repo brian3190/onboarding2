@@ -47,11 +47,11 @@ export class EditCustomerModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="CustomerName">
                                         <Form.Label>NAME</Form.Label>
-                                        <Form.Control type="text" name="CustomerName" required />
+                                        <Form.Control type="text" name="CustomerName" defaultValue={this.props.custname} required />
                                     </Form.Group>
                                     <Form.Group controlId="CustomerAddress">
                                         <Form.Label>ADDRESS</Form.Label>
-                                        <Form.Control type="text" name="CustomerAddress" required />
+                                        <Form.Control type="text" name="CustomerAddress" defaultValue={this.props.custadd} required />
                                     </Form.Group>
                                 </Form>
                             </Col>

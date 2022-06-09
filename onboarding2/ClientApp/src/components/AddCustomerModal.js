@@ -62,7 +62,7 @@ export class AddCustomerModal extends Component {
                             Cancel
                         </Button>
                         <ButtonGroup>
-                            <Button variant="success" type="submit">
+                            <Button variant="success" type="submit" onClick={this.props.onHide}>
                                 Create | <FaCheck color="white" />
                             </Button>
                         </ButtonGroup>

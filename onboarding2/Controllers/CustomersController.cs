@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace onboarding2.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
         private readonly onboardingContext _context;
@@ -24,7 +24,7 @@ namespace onboarding2.Controllers
         //    _repository = repository;
         //}
 
-        // GET: api/Customers/Index/
+        // GET: api/Customers/
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -40,7 +40,7 @@ namespace onboarding2.Controllers
             }
         }
 
-        // GET: api/Customers/Get/5
+        // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int? id)
         {
@@ -79,21 +79,6 @@ namespace onboarding2.Controllers
             catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-        }
-
-        // POST: CustomersController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return Ok();
             }
         }
 

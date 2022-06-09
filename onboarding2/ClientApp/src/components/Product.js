@@ -29,7 +29,7 @@ export class Product extends Component {
     }
 
     render() {
-        const { prod, productid } = this.state;
+        const { prod, productid, productname, productprice } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
@@ -42,33 +42,33 @@ export class Product extends Component {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Address</th>
+                            <th>Price</th>
                             <th>Actions</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {prod.map(c =>
-                            <tr key={c.Id}>
-                                <td>{c.Name}</td>
-                                <td>{c.Address}</td>
+                            <tr key={c.id}>
+                                <td>{c.name}</td>
+                                <td>${c.price}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, productid: c.Id })}>
+                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, productid: c.id, productname: c.name, productprice: c.price })}>
                                         <PencilSquare color="white" />
                                         EDIT
                                         {/*propsId*/}
-                                        <EditProductModal show={this.state.editModalShow}
-                                            onHide={ModalClose} />
                                     </Button>
+                                    <EditProductModal show={this.state.editModalShow}
+                                        onHide={ModalClose} productid={productid} productname={productname} productprice={productprice}/>
                                 </td>
                                 <td>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, productid: c.Id })}>
+                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, productid: c.id })}>
                                         <TrashFill color="white" />
                                         DELETE
                                         {/*propsId*/}
-                                        <DeleteProductModal show={this.state.deleteModalShow}
-                                            onHide={ModalClose} productid={productid} />
                                     </Button>
+                                    <DeleteProductModal show={this.state.deleteModalShow}
+                                        onHide={ModalClose} productid={productid} />
                                 </td>
                             </tr>)
                         }

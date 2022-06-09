@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
+import { Modal, Button, ButtonGroup, Row, Col, Form } from 'react-bootstrap';
 import { ImCross } from 'react-icons/im';
-
 
 export class DeleteCustomerModal extends Component {
     constructor(props) {
@@ -48,14 +47,12 @@ export class DeleteCustomerModal extends Component {
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Form.Group controlId="SubmitButtons">
-                            <Button variant="dark" onClick={this.props.onHide}>
-                                Cancel
-                            </Button>
-                            <Button variant="danger" type="submit">
-                                Delete | <ImCross color="white" />
-                            </Button>
-                        </Form.Group>
+                        <Button variant="dark" onClick={this.props.onHide}>
+                            Cancel
+                        </Button>
+                        <Button variant="danger" type="submit">
+                            Delete | <ImCross color="white" />
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

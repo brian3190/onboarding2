@@ -28,7 +28,7 @@ export class Customer extends Component {
     }
 
     render() {
-        const { cust, custid } = this.state;
+        const { cust, custid, custname, custadd } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false });
         return (
             <div className="container">
@@ -49,27 +49,26 @@ export class Customer extends Component {
                     </Table.Header>
                     <Table.Body>
                         {cust.map(c =>
-                            <Table.Row key={c.Id}>
-                                <Table.Cell>{c.Name}</Table.Cell>
-                                <Table.Cell>{c.Address}</Table.Cell>
+                            <Table.Row key={c.id}>
+                                <Table.Cell>{c.name}</Table.Cell>
+                                <Table.Cell>{c.address}</Table.Cell>
                                 <Table.Cell>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, custid: c.Id })}>
+                                    <Button color="yellow" onClick={() => this.setState({ editModalShow: true, custid: c.id, custname: c.name, custadd: c.address })}>
                                         <Icon link name="edit" />
                                         EDIT
                                         {/*propsId*/}
-                                        <EditCustomerModal show={this.state.editModalShow} 
-                                            
-                                            onHide={ModalClose} />
                                     </Button>
+                                    <EditCustomerModal show={this.state.editModalShow}                 
+                                        onHide={ModalClose} custid={custid} custname={custname} custadd={custadd}/>
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, custid: c.Id })}>
+                                    <Button color="red" onClick={() => this.setState({ deleteModalShow: true, custid: c.id })}>
                                         <Icon link name="trash" />
                                         DELETE
                                         {/*propsId*/}
-                                        <DeleteCustomerModal show={this.state.deleteModalShow}
-                                            onHide={ModalClose} custid={custid} />
                                     </Button>
+                                    <DeleteCustomerModal show={this.state.deleteModalShow}
+                                        onHide={ModalClose} custid={custid} />
                                 </Table.Cell>
                             </Table.Row>)
                          }

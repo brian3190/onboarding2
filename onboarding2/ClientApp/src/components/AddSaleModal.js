@@ -87,7 +87,7 @@ export class AddSaleModal extends Component {
                         <Button variant="dark" onClick={this.props.onHide}>
                             Cancel
                         </Button>
-                        <Button variant="success" type="submit">
+                        <Button variant="success" type="submit" onClick={this.props.onHide}>
                             Create
                         </Button>
                     </Modal.Footer>
