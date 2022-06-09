@@ -56,27 +56,27 @@ export class AddSaleModal extends Component {
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group controlId="SaleDateSold">
                                         <Form.Label>Date Sold</Form.Label>
-                                        <Form.Control type="text" name="SaleDateSold" defaultValue={this.props.datesold} disabled />
+                                        <Form.Control type="text" name="SaleDateSold" required />
                                     </Form.Group>
                                     <Form.Group controlId="Customer">
                                         <Form.Label>Customer</Form.Label>
                                         <Form.Control as="select" name="Customer">
                                             {this.state.sales.map(c =>
-                                                <option key={c.Id}> {c.Customer.Name} </option> )}
+                                                <option key={c.id}> {c.customer.name} </option> )}
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group controlId="Product">
                                         <Form.Label>Product</Form.Label>
                                         <Form.Control as="select" name="Sales">
                                             {this.state.sales.map(c =>
-                                                <option key={c.Id}>{c.Product.Name}</option>)}
+                                                <option key={c.id}>{c.product.name}</option>)}
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group controlId="Store">
                                         <Form.Label>Store</Form.Label>
                                         <Form.Control as="select" name="Store">
                                             {this.state.sales.map(c =>
-                                                <option key={c.Id}>{c.Store.Name}</option>)}
+                                                <option key={c.id}>{c.store.name}</option>)}
                                         </Form.Control>
                                     </Form.Group>
                                 </Form>

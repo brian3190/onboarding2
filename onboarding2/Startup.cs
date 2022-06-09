@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using onboarding2.Data;
 //using Newtonsoft.Json.Serializaton;
 
@@ -31,7 +32,12 @@ namespace onboarding2
             //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //});
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(cfg =>
+                {
+                    cfg.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+
 
             //services.AddControllersWithViews()
             //    .AddNewtonsoftJson(options =>

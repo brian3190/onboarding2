@@ -30,7 +30,7 @@ export class Sales extends Component {
     }
 
     render() {
-        const { sales, datesold, saleid } = this.state;
+        const { sales, datesold, saleid, custname, storname, prodname } = this.state;
         let ModalClose = () => this.setState({ addModalShow: false, editModalShow: false, deleteModalShow: false  });
         return (
             <div className="container">
@@ -54,18 +54,26 @@ export class Sales extends Component {
                     </thead>
                     <tbody>
                         {sales.map((c, index) =>
-                            <tr key={index}>
-                                <td>{c[0].Customer.name}</td>
-                                <td>{c[1].Product.name}</td>
-                                <td>{c[2].Store.name}</td>
+                            <tr key={c.id} >
+                                <td>{c.customer.name}</td>
+                                <td>{c.product.name}</td>
+                                <td>{c.store.name}</td>
                                 <td>{c.dateSold}</td>
                                 <td>
-                                    <Button variant="warning" onClick={() => this.setState({ editModalShow: true, datesold: c.DateSold, saleid: c.Id })}>
+                                    <Button variant="warning"
+                                        onClick={() => this.setState({
+                                            editModalShow: true,
+                                            datesold: c.dateSold,
+                                            saleid: c.id,
+                                            custname: c.customer.name,
+                                            prodname: c.product.name,
+                                            storname: c.store.name
+                                        })}>
                                         <PencilSquare color="white"/>
                                         EDIT
                                     </Button>
                                     <EditSaleModal show={this.state.editModalShow}
-                                        onHide={ModalClose} datesold={datesold}/>
+                                        onHide={ModalClose} datesold={datesold} custname={custname} prodname={prodname} storname={storname}/>
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={() => this.setState({ deleteModalShow: true, saleid: c.Id })}>

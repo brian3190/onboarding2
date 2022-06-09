@@ -30,7 +30,7 @@ namespace onboarding2.Controllers
         {
             try
             {
-                var results = await _context.Customers.Take(10).ToListAsync();
+                var results = await _context.Customers.Include(s => s.ProductSold).Take(10).ToListAsync();
                 if (results == null) return NotFound();
                 return Ok(results);
             }

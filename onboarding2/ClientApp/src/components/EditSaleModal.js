@@ -53,15 +53,15 @@ export class EditSaleModal extends Component {
                                     </Form.Group>
                                     <Form.Group controlId="CustomerName">
                                         <Form.Label>Customer</Form.Label>
-                                        <Form.Control type="text" name="CustomerName" required />
+                                        <Form.Control type="text" name="CustomerName" defaultValue={this.props.custname} required />
                                     </Form.Group>
                                     <Form.Group controlId="ProductName">
                                         <Form.Label>Product</Form.Label>
-                                        <Form.Control type="text" name="ProductName" required />
+                                        <Form.Control type="text" name="ProductName" defaultValue={this.props.prodname} required />
                                     </Form.Group>
                                     <Form.Group controlId="StoreName">
                                         <Form.Label>Store</Form.Label>
-                                        <Form.Control type="drop-down" name="StoreName" required />
+                                        <Form.Control type="drop-down" name="StoreName" defaultValue={this.props.storname} required />
                                     </Form.Group>
                                 </Form>
                             </Col>
