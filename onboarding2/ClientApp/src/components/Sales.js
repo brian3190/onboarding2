@@ -14,7 +14,7 @@ export class Sales extends Component {
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'sales')
+        fetch('https://onboarding2.azurewebsites.net/api/sales')
             .then(res => res.json())
             .then(data => {
                 this.setState({ sales: data });

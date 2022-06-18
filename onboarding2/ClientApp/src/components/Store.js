@@ -14,7 +14,7 @@ export class Store extends Component {
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'stores')
+        fetch('https://onboarding2.azurewebsites.net/api/stores')
             .then(res => res.json())
             .then(data => {
                 this.setState({ stor: data });

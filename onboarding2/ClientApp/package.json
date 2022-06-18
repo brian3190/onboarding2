@@ -35,8 +35,10 @@
     "extends": "react-app"
   },
   "scripts": {
-    "start": "rimraf ./build && react-scripts start",
-    "build": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build && shx rm -rf staging && shx cp -r build staging",
+    "build:production": "env-cmd -f .env.production react-scripts build && shx rm -rf production && shx cp -r build production",
+    "start:staging": "rimraf ./build && env-cmd -f .env.staging react-scripts start",
+    "start:production": "rimraf ./build && env-cmd -f .env.production react-scripts start",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/"

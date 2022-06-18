@@ -11,8 +11,9 @@ export class Customer extends Component {
         this.state = { cust: [], addModalShow: false, editModalShow: false, deleteModalShow: false }
     }
 
-   refreshList() {
-       fetch(process.env.REACT_APP_API + 'customers')
+    refreshList() {
+       console.log('TATA/'+ process.env.LOCAL_APP_API);
+       fetch('https://onboarding2.azurewebsites.net/api/customers')
            .then(res => res.json())
            .then(data => {
                this.setState({ cust: data });

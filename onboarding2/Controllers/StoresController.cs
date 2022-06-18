@@ -92,22 +92,21 @@ namespace onboarding2.Controllers
             //_context.Entry(store).State = EntityState.Modified;
             try
             {
+                if (_context.Customers.Find(id) == null)
+                {
+                    return NotFound();
+                }
                 var _editedStore = await _context.Stores.FindAsync(id);
                 _editedStore.Name = store.Name;
                 _editedStore.Address = store.Address;
                 //Concurrency check
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (_context.Customers.Find(id) == null)
-                {
-                    return NotFound();
-                }
-
-                throw;
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
-            return NoContent();
         }
 
         // DELETE: StoresController/Delete/5
@@ -115,6 +114,7 @@ namespace onboarding2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<Store>> Delete(int? id)
         {
+            if (id == null) return NotFound();
             try
             {
                 var _stores = await _context.Stores.FindAsync(id);
@@ -122,9 +122,9 @@ namespace onboarding2.Controllers
                 await _context.SaveChangesAsync();
                 return _stores;
             }
-            catch
+            catch(Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
     }

@@ -31,9 +31,9 @@ namespace onboarding2.Controllers
                 if (results == null) return NotFound();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status501NotImplemented, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -55,9 +55,9 @@ namespace onboarding2.Controllers
                 if (results == null) return NotFound();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -77,9 +77,9 @@ namespace onboarding2.Controllers
                     sales
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -101,6 +101,10 @@ namespace onboarding2.Controllers
             //_context.Entry(sales).State = EntityState.Modified;
             try
             {
+                if (_context.Sales.Find(id) == null)
+                {
+                    return NotFound();
+                }
                 var _editedSale = await _context.Sales
                                   .Include("Customer")
                                   .Include("Product")
@@ -111,17 +115,12 @@ namespace onboarding2.Controllers
                 _editedSale.Store.Name = sales.Store.Name;
                 //Concurrency check
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (_context.Sales.Find(id) == null)
-                {
-                    return NotFound();
-                }
-
-                throw;
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
-            return NoContent();
         }
 
         // DELETE: SalesController/Delete/5
@@ -130,12 +129,18 @@ namespace onboarding2.Controllers
         public async Task<ActionResult<Sales>> Delete(int? id)
         {
             if (id == null) return NotFound();
-            var _sales = await _context.Sales.FindAsync(id);
+            try
+            {
+                var _sales = await _context.Sales.FindAsync(id);
 
-            _context.Sales.Remove(_sales);
-            await _context.SaveChangesAsync();
-
-            return _sales;
+                _context.Sales.Remove(_sales);
+                await _context.SaveChangesAsync();
+                return _sales;
+            }
+            catch(Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
+            }
         }
     }
 }

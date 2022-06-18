@@ -11,7 +11,7 @@ export class DeleteSaleModal extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch(process.env.REACT_APP_API + 'sales/' + this.props.saleid, {
+        fetch(process.env.LOCAL_APP_API + 'sales/' + this.props.saleid, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

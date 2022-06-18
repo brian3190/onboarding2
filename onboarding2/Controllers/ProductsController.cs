@@ -27,9 +27,9 @@ namespace onboarding2.Controllers
                 var results = await _context.Products.Take(10).ToListAsync();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -47,9 +47,9 @@ namespace onboarding2.Controllers
                 if (results == null) return NotFound();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -69,9 +69,9 @@ namespace onboarding2.Controllers
                     product
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -87,29 +87,29 @@ namespace onboarding2.Controllers
             _context.Entry(product).State = EntityState.Modified;
             try
             {
+                if (_context.Products.Find(id) == null)
+                {
+                    return NotFound();
+                }
                 var _editedProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
                 _editedProduct.Name = product.Name;
                 _editedProduct.Price = product.Price;
                 //Concurrency check
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (_context.Products.Find(id) == null)
-                {
-                    return NotFound();
-                }
-
-                throw;
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
-            return NoContent();
         }
 
         // DELETE: ProductsController/Delete/5
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Product>> Delete(int id)
+        public async Task<ActionResult<Product>> Delete(int? id)
         {
+            if (id == null) return NotFound();
             try
             {
                 var _products = await _context.Products.FindAsync(id);
@@ -118,9 +118,9 @@ namespace onboarding2.Controllers
                 return _products;
 
             }
-            catch
+            catch(Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
     }

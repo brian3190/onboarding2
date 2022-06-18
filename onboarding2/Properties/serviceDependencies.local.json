@@ -1,10 +1,13 @@
 {
   "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
     "mssql1": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/onboarding2/databases/Onboarding2(1)",
       "type": "mssql.azure",
       "connectionId": "onboarding2",
-      "secretStore": "AzureAppSettings"
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

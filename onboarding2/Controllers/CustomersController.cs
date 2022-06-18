@@ -34,9 +34,9 @@ namespace onboarding2.Controllers
                 if (results == null) return NotFound();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -54,9 +54,9 @@ namespace onboarding2.Controllers
                 if (results == null) return NotFound();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -76,9 +76,9 @@ namespace onboarding2.Controllers
                     customer
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
 
@@ -93,22 +93,21 @@ namespace onboarding2.Controllers
             }          
             try
             {
+                if (_context.Customers.Find(id) == null)
+                {
+                    return NotFound();
+                }
                 var _editedCustomer = await _context.Customers.FindAsync(id);
                 _editedCustomer.Name = customer.Name;
                 _editedCustomer.Address = customer.Address;
                 //Concurrency check
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch(DbUpdateConcurrencyException)
+            catch(Exception ex)
             {
-                if (_context.Customers.Find(id) == null)
-                {
-                    return NotFound();
-                }
-
-                throw;
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
-            return NoContent();
         }
 
         // DELETE: CustomersController/Delete/5
@@ -116,6 +115,7 @@ namespace onboarding2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<Customer>> Delete(int? id)
         {
+            if (id == null) return NotFound();
             try
             {
                 var _customers = await _context.Customers.FindAsync(id);
@@ -123,9 +123,9 @@ namespace onboarding2.Controllers
                 await _context.SaveChangesAsync();
                 return _customers;
             }
-            catch
+            catch(Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure. \n {ex}");
             }
         }
     }

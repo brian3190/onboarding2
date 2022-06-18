@@ -23,7 +23,7 @@ namespace onboarding2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<onboardingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("azure")));
+            services.AddDbContext<onboardingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("onboarding2")));
             //services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             //Enable CORS
@@ -63,7 +63,9 @@ namespace onboarding2
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = IWebHostEnvironment.IsDevelopment() 
+                                            ? "ClientApp/build"
+                                            : $"ClientApp/{WebHostEnvironment.EnvironmentName};
             });
             
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -106,7 +108,7 @@ namespace onboarding2
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseReactDevelopmentServer(npmScript: "start:production");
                 }
             });
         }

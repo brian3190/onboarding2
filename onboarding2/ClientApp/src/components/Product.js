@@ -13,7 +13,7 @@ export class Product extends Component {
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'products')
+        fetch('https://onboarding2.azurewebsites.net/api/products')
             .then(res => res.json())
             .then(data => {
                 this.setState({ prod: data });
